@@ -121,9 +121,40 @@ table.rt code { font-family:var(--font-mono); font-size:0.85rem; color:var(--acc
 @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
 @media(max-width:700px) { .quiz-header{flex-direction:column} .q-card{padding:1.2rem} .container{padding:1.5rem 1rem 3rem} .hero{padding:3rem 1.5rem 2.5rem} .nav button{padding:0.8rem 0.9rem;font-size:0.82rem} .diff-control{flex-wrap:wrap;justify-content:center} }
 
+
+/* ─── WCAG 2.1 AA: Visible focus indicators ─── */
+:focus-visible {
+  outline: 3px solid #005fcc !important;
+  outline-offset: 2px !important;
+}
+.tab-btn:focus-visible, .nav-btn:focus-visible {
+  outline: 3px solid #005fcc !important;
+  outline-offset: 2px !important;
+}
+/* ─── Skip link ─── */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 1rem;
+  background: #005fcc;
+  color: #fff;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0 0 6px 6px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  z-index: 9999;
+  transition: top 0.2s;
+}
+.skip-link:focus {
+  top: 0;
+}
+
 </style>
 </head>
 <body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
 <div class="hero">
 <h1>MCAT <span>Adaptive</span> Prep</h1>
 <p class="sub">Systems integration, commonly confused concepts, and adaptive difficulty. Control your learning.</p>
@@ -142,7 +173,7 @@ table.rt code { font-family:var(--font-mono); font-size:0.85rem; color:var(--acc
 <button onclick="showSection('ochem')">Organic Reactions</button>
 <button onclick="showSection('tips')">MCAT Tips</button>
 </div>
-<div class="container">
+<div class="container" id="main-content" role="main">
 
 <!-- ADAPTIVE PRACTICE -->
 <div class="section active" id="sec-practice">
