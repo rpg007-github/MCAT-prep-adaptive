@@ -122,40 +122,33 @@ table.rt code { font-family:var(--font-mono); font-size:0.85rem; color:var(--acc
 @media(max-width:700px) { .quiz-header{flex-direction:column} .q-card{padding:1.2rem} .container{padding:1.5rem 1rem 3rem} .hero{padding:3rem 1.5rem 2.5rem} .nav button{padding:0.8rem 0.9rem;font-size:0.82rem} .diff-control{flex-wrap:wrap;justify-content:center} }
 
 
-/* ─── WCAG 2.1 AA: Visible focus indicators ─── */
-:focus-visible {
-  outline: 3px solid #005fcc !important;
-  outline-offset: 2px !important;
-}
-.tab-btn:focus-visible, .nav-btn:focus-visible {
-  outline: 3px solid #005fcc !important;
-  outline-offset: 2px !important;
-}
-/* ─── Skip link ─── */
-.skip-link {
-  position: absolute;
-  top: -100px;
-  left: 1rem;
-  background: #005fcc;
-  color: #fff;
-  padding: 0.6rem 1.2rem;
-  border-radius: 0 0 6px 6px;
-  font-weight: 700;
-  font-size: 0.95rem;
-  text-decoration: none;
-  z-index: 9999;
-  transition: top 0.2s;
-}
-.skip-link:focus {
-  top: 0;
-}
+/* ─── WCAG 2.1 AA ─── */
+:focus-visible { outline:3px solid var(--accent) !important; outline-offset:3px !important; border-radius:3px; }
+.skip-link { position:absolute; top:-100px; left:1rem; background:var(--accent); color:var(--bg); padding:0.6rem 1.2rem; border-radius:0 0 6px 6px; font-weight:700; font-size:0.95rem; text-decoration:none; z-index:9999; transition:top 0.2s; }
+.skip-link:focus { top:0; }
+@media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:0.01ms !important; transition-duration:0.01ms !important; } }
+.nav button[aria-selected="true"] { color:var(--accent); border-bottom-color:var(--accent); }
+/* ─── Worked example ─── */
+.worked { background:rgba(110,231,183,0.04); border:1px solid rgba(110,231,183,0.18); border-left:4px solid var(--accent); border-radius:0 var(--radius) var(--radius) 0; padding:1.2rem 1.4rem; margin:1.2rem 0; }
+.worked-hd { color:var(--accent); font-weight:700; font-size:0.78rem; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.7rem; }
+.worked-prompt { color:var(--text-soft); font-size:0.93rem; margin-bottom:0.9rem; font-style:italic; border-left:2px solid rgba(110,231,183,0.25); padding-left:0.8rem; line-height:1.65; }
+.step { display:flex; gap:0.75rem; margin-bottom:0.6rem; line-height:1.65; }
+.sn { background:var(--accent); color:var(--bg); font-weight:700; font-size:0.74rem; min-width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:0.18rem; }
+.st { color:var(--text-soft); font-size:0.93rem; }
+.st strong { color:var(--text); }
+.worked-ans { margin-top:0.85rem; padding-top:0.75rem; border-top:1px solid rgba(110,231,183,0.18); color:var(--accent); font-size:0.9rem; font-weight:600; }
+/* ─── Disclaimer ─── */
+.disclaimer { max-width:800px; margin:40px auto; padding:20px 30px; background:#fff8e1; border-left:4px solid #f9a825; border-radius:8px; font-size:14px; line-height:1.6; color:#3a3000; }
+.disclaimer-title { font-weight:bold; font-size:15px; margin-bottom:10px; color:#2a2000; }
+.disclaimer p { margin:0 0 10px 0; }
+.disclaimer p:last-child { margin-bottom:0; }
 
 </style>
 </head>
 <body>
 <a href="#main-content" class="skip-link">Skip to main content</a>
 
-<div class="hero">
+<header class="hero">
 <h1>MCAT <span>Adaptive</span> Prep</h1>
 <p class="sub">Systems integration, commonly confused concepts, and adaptive difficulty. Control your learning.</p>
 <div class="badges">
@@ -164,21 +157,21 @@ table.rt code { font-family:var(--font-mono); font-size:0.85rem; color:var(--acc
 <span class="badge badge-purple">MCAT Strategy</span>
 <span class="badge badge-amber">Commonly Confused</span>
 </div>
-</div>
-<div class="nav" id="main-nav">
-<button class="active" onclick="showSection('practice')">Adaptive Practice</button>
-<button onclick="showSection('systems')">Systems Integration</button>
-<button onclick="showSection('confused')">Commonly Confused</button>
-<button onclick="showSection('genetics')">Genetics & Disease</button>
-<button onclick="showSection('ochem')">Organic Reactions</button>
-<button onclick="showSection('tips')">MCAT Tips</button>
-</div>
-<div class="container" id="main-content" role="main">
+</header>
+<nav class="nav" id="main-nav">
+<button id="tab-practice" role="tab" aria-selected="true" aria-controls="sec-practice" class="active" onclick="showSection('practice',this)">Adaptive Practice</button>
+<button id="tab-systems" role="tab" aria-selected="false" aria-controls="sec-systems" onclick="showSection('systems',this)">Systems Integration</button>
+<button id="tab-confused" role="tab" aria-selected="false" aria-controls="sec-confused" onclick="showSection('confused',this)">Commonly Confused</button>
+<button id="tab-genetics" role="tab" aria-selected="false" aria-controls="sec-genetics" onclick="showSection('genetics',this)">Genetics & Disease</button>
+<button id="tab-ochem" role="tab" aria-selected="false" aria-controls="sec-ochem" onclick="showSection('ochem',this)">Organic Reactions</button>
+<button id="tab-tips" role="tab" aria-selected="false" aria-controls="sec-tips" onclick="showSection('tips',this)">MCAT Tips</button>
+</nav>
+<main class="container" id="main-content">
 
 <!-- ADAPTIVE PRACTICE -->
-<div class="section active" id="sec-practice">
+<section class="section active" id="sec-practice" role="tabpanel" aria-labelledby="tab-practice" tabindex="-1">
 <div class="quiz-header">
-<div class="quiz-stats">
+<div class="quiz-stats" role="status" aria-live="polite" aria-label="Quiz score">
 <div class="stat stat-green"><div class="stat-val" id="st-correct">0</div><div class="stat-label">Correct</div></div>
 <div class="stat stat-red"><div class="stat-val" id="st-wrong">0</div><div class="stat-label">Wrong</div></div>
 <div class="stat stat-blue"><div class="stat-val" id="st-total">0</div><div class="stat-label">Total</div></div>
@@ -199,11 +192,10 @@ table.rt code { font-family:var(--font-mono); font-size:0.85rem; color:var(--acc
 <button class="q-submit" onclick="loadNextQuestion()" id="btn-next-q" style="display:none;">Next Question &rarr;</button>
 <button class="q-submit" onclick="startQuiz()" id="btn-start" style="background:var(--accent2);">Start Practice</button>
 </div>
-</div>
-
+</section>
 
 <!-- ===== SYSTEMS INTEGRATION ===== -->
-<div class="section" id="sec-systems">
+<section class="section" id="sec-systems" role="tabpanel" aria-labelledby="tab-systems" tabindex="-1">
 <div class="sg-section">
 <h2>Systems Integration: How the MCAT Connects Everything</h2>
 <p>The MCAT loves asking how one disease or condition creates a cascade of effects across organ systems. Diabetes is the gold standard for this, but renal function, cardiovascular disease, and endocrine disorders all show up as multi-system questions. The key is thinking in webs, not silos.</p>
@@ -235,6 +227,15 @@ table.rt code { font-family:var(--font-mono); font-size:0.85rem; color:var(--acc
 <div class="sys"><div class="sys-label">Systems Connection</div>When blood glucose exceeds the renal threshold (~180 mg/dL), glucose spills into urine. Glucose is osmotically active, dragging water with it: polyuria (excess urination) leading to polydipsia (excess thirst). The classic triad: polyuria, polydipsia, polyphagia (excess hunger because cells are starving despite high blood glucose).</div>
 </div>
 
+<div class="worked">
+<div class="worked-hd">&#9998; Worked Example — DKA vs. HHS — Same Glucose, Different Crisis</div>
+<div class="worked-prompt">Patient A: 19-year-old, Type 1, glucose 420 mg/dL, pH 7.18, ketones 4+, K⁺ 5.9 mEq/L. Patient B: 72-year-old, Type 2, glucose 890 mg/dL, pH 7.37, trace ketones, severely dehydrated. Why do they differ, and what explains the paradoxical hyperkalemia in Patient A?</div>
+<div class="step"><span class="sn">1</span><span class="st"><strong>Patient A — DKA mechanism:</strong> Zero insulin → uncontrolled lipolysis → free fatty acids flood liver → acetyl-CoA exceeds TCA cycle capacity → HMG-CoA synthase pathway → ketone bodies (acetoacetate, β-hydroxybutyrate, acetone). Ketones are organic acids → blood pH 7.18. Fruity breath = acetone volatilizing from lungs.</span></div>
+<div class="step"><span class="sn">2</span><span class="st"><strong>Patient B — HHS mechanism:</strong> Residual insulin (Type 2) is enough to suppress lipolysis and ketogenesis, but not enough to move glucose into cells. Glucose climbs to 890. Above renal threshold (~180 mg/dL), glucose spills into urine, dragging water osmotically → polyuria → massive free-water loss → hemoconcentration. No ketoacidosis because ketogenesis is suppressed.</span></div>
+<div class="step"><span class="sn">3</span><span class="st"><strong>Hyperkalemia paradox in DKA:</strong> Two simultaneous mechanisms: (1) Acidosis — excess H⁺ enters cells; K⁺ exits to maintain electroneutrality. (2) Insulin deficiency — insulin normally stimulates Na⁺/K⁺-ATPase, pumping K⁺ into cells. Without insulin, K⁺ accumulates in plasma. Important: total body K⁺ is actually LOW (lost in urine), but serum K⁺ looks HIGH.</span></div>
+<div class="step"><span class="sn">4</span><span class="st"><strong>Treatment trap:</strong> Giving insulin in DKA rapidly drives K⁺ back into cells → serum K⁺ can plummet → fatal arrhythmia. Protocol: always check serum K⁺ before insulin. If K⁺ &lt; 3.5, replace potassium FIRST. If K⁺ 3.5–5.0, replace concurrently with insulin.</span></div>
+<div class="worked-ans">&#10003; MCAT pattern: DKA = Type 1, ketoacidosis, hyperkalemia (but low total body K⁺). HHS = Type 2, no ketones, extreme glucose, severe dehydration. The K⁺ paradox (high serum, low total body) is a high-frequency test question.</div>
+</div>
 <div class="card">
 <h3>Immune System Connections</h3>
 <p>Hyperglycemia impairs neutrophil chemotaxis, phagocytosis, and oxidative burst. This is why diabetic patients are prone to infections: UTIs (glycosuria feeds bacteria), skin infections, and Candida (thrives in high glucose). Type 1 diabetes is itself autoimmune, with overlap to thyroiditis, celiac disease, and Addison disease.</p>
@@ -251,6 +252,16 @@ table.rt code { font-family:var(--font-mono); font-size:0.85rem; color:var(--acc
 <div class="sys"><div class="sys-label">Systems Connection</div>Heart failure creates a vicious cycle: low cardiac output reduces renal perfusion, kidneys activate RAAS and retain fluid, but the heart cannot handle extra volume. This is cardiorenal syndrome. Conversely, CKD causes hypertension (fluid overload, excess renin), leading to left ventricular hypertrophy and heart failure. The MCAT may describe this cycle and ask where a drug (ACE inhibitor, diuretic) breaks the loop.</div>
 </div>
 
+<div class="worked">
+<div class="worked-hd">&#9998; Worked Example — Tracing Diabetic Kidney Disease to Bone Loss</div>
+<div class="worked-prompt">A 52-year-old with 15-year Type 2 diabetes has: GFR 28 mL/min, Ca²⁺ 7.2 mg/dL (low), PTH 310 pg/mL (high), bone density T-score −2.8 (osteoporosis). Walk through each mechanistic step connecting the kidney to the bone finding.</div>
+<div class="step"><span class="sn">1</span><span class="st"><strong>Start at the primary injury:</strong> 15 years of hyperglycemia → glycosylation of glomerular basement membrane proteins → filtration barrier thickens → nephron scarring → GFR falls to 28 (Stage 4 CKD). This is diabetic nephropathy.</span></div>
+<div class="step"><span class="sn">2</span><span class="st"><strong>Identify the lost enzyme:</strong> The proximal tubule epithelium expresses 1α-hydroxylase, which converts 25-OH vitamin D (inactive, from liver) into 1,25-(OH)₂ vitamin D = calcitriol (active form). With nephron loss, this conversion fails. Calcitriol ↓.</span></div>
+<div class="step"><span class="sn">3</span><span class="st"><strong>Gut consequence:</strong> Calcitriol normally upregulates intestinal TRPV6 channels and calbindin, enabling Ca²⁺ absorption. Without calcitriol → less Ca²⁺ absorbed from diet → serum Ca²⁺ falls to 7.2 mg/dL (normal: 8.5–10.5).</span></div>
+<div class="step"><span class="sn">4</span><span class="st"><strong>Parathyroid response:</strong> Chief cells detect hypocalcemia via the calcium-sensing receptor (CaSR) → PTH secreted in large amounts (310 pg/mL, normal &lt;65). This is secondary hyperparathyroidism — the glands are responding normally to a renal problem.</span></div>
+<div class="step"><span class="sn">5</span><span class="st"><strong>Bone consequence:</strong> PTH binds osteoblasts → they express RANK-L → RANK-L activates osteoclasts → bone matrix resorbed → Ca²⁺ released into blood (partially corrects Ca²⁺) but at the cost of bone mineral density → T-score −2.8 = osteoporosis, fracture risk.</span></div>
+<div class="worked-ans">&#10003; One disease (diabetes) → one enzyme deficiency (renal 1α-hydroxylase) → three simultaneous consequences (↓ calcitriol, ↓ serum Ca²⁺, ↑ PTH) → one distant organ effect (bone resorption). MCAT will give you the bone finding and ask you to identify the renal enzyme.</div>
+</div>
 <div class="card">
 <h3>Renal-Acid Base-Respiratory Connection</h3>
 <p>Lungs handle rapid pH response (minutes): adjusting ventilation to change CO2. Kidneys handle slow response (hours to days): reabsorbing/excreting bicarbonate, secreting H+, generating new bicarbonate from glutamine. When one fails, the other compensates.</p>
@@ -268,6 +279,16 @@ table.rt code { font-family:var(--font-mono); font-size:0.85rem; color:var(--acc
 <tr><td>Multiple myeloma</td><td>Light chains clog tubules (cast nephropathy)</td><td>Hypercalcemia from bone resorption damages tubules further</td></tr></table>
 </div>
 
+<div class="worked">
+<div class="worked-hd">&#9998; Worked Example — Breaking the Cardiorenal Vicious Cycle</div>
+<div class="worked-prompt">A 68-year-old with heart failure (EF 22%) develops worsening leg edema and creatinine rises from 1.0 → 3.2 over two weeks despite being on an ACE inhibitor. Trace the pathophysiology step by step, then explain where ACE inhibitors and diuretics each break the loop.</div>
+<div class="step"><span class="sn">1</span><span class="st"><strong>Trigger — low cardiac output:</strong> EF 22% means the heart ejects only 22% of its end-diastolic volume. Mean arterial pressure drops. Renal perfusion falls below normal.</span></div>
+<div class="step"><span class="sn">2</span><span class="st"><strong>Kidney senses low perfusion:</strong> Juxtaglomerular (JG) cells detect reduced stretch in the afferent arteriole wall → release renin. Macula densa detects low NaCl delivery → additional renin stimulus. Two independent signals both activate RAAS.</span></div>
+<div class="step"><span class="sn">3</span><span class="st"><strong>RAAS cascade:</strong> Renin cleaves angiotensinogen → Ang I → ACE (in pulmonary endothelium) → Ang II. Ang II: (a) potent systemic vasoconstrictor — raises BP but dramatically increases cardiac afterload; (b) stimulates adrenal aldosterone → Na⁺/water reabsorption in collecting duct — raises preload; (c) constricts efferent arteriole more than afferent — maintains GFR short-term (this is why creatinine rises when you give ACE inhibitors).</span></div>
+<div class="step"><span class="sn">4</span><span class="st"><strong>Volume overload worsens the heart:</strong> Retained fluid increases venous return. Starling's law says more preload = more stroke volume — but in a failing heart, the curve is flat or descending. Extra volume causes pulmonary congestion and peripheral edema instead of improved output.</span></div>
+<div class="step"><span class="sn">5</span><span class="st"><strong>Drug break points:</strong> ACE inhibitor: blocks Ang I → Ang II. ↓ Vasoconstriction (lower afterload) + ↓ Aldosterone (less fluid retention). The creatinine rise here reflects reduced efferent constriction — expected and usually acceptable (&lt;30% rise is tolerated). Diuretics (furosemide): block Na-K-2Cl cotransporter in thick ascending limb → reduce fluid overload directly, lowering preload.</span></div>
+<div class="worked-ans">&#10003; MCAT logic: identify WHERE the cycle runs (heart → kidney RAAS → volume → heart), then identify WHICH drug breaks WHICH step. A creatinine bump after starting ACE inhibitor is expected (efferent dilation, lower GFR) — it does NOT mean the drug is harmful.</div>
+</div>
 <div class="card">
 <h3>Signaling Pathways in Disease</h3>
 <p>Insulin binds a receptor tyrosine kinase, activating PI3K/Akt (GLUT4 translocation, glycogen synthesis, lipogenesis) and Ras/MAPK (growth). In Type 2 diabetes, PI3K/Akt is attenuated but Ras/MAPK may remain intact, explaining the cancer risk association with hyperinsulinemia.</p>
@@ -275,25 +296,34 @@ table.rt code { font-family:var(--font-mono); font-size:0.85rem; color:var(--acc
 <div class="warn"><div class="warn-label">Commonly Confused</div>Cholera toxin permanently activates Gs (locks GTP-bound), causing continuous cAMP in intestinal cells, opening CFTR, causing secretory diarrhea. Pertussis toxin permanently inactivates Gi (prevents it from inhibiting adenylyl cyclase), which also raises cAMP but in respiratory/immune cells. Know which toxin hits which G-protein.</div>
 </div>
 </div>
-</div>
+</section>
 
 <!-- ===== COMMONLY CONFUSED ===== -->
-<div class="section" id="sec-confused">
+<section class="section" id="sec-confused" role="tabpanel" aria-labelledby="tab-confused" tabindex="-1">
 <div class="sg-section">
 <h2>Concepts Students Commonly Confuse</h2>
 <p>These are the topics that trip up students in class and on the MCAT. The patterns here come from years of watching students make the same mistakes. Study these comparisons carefully, because the MCAT specifically designs answer choices to exploit these confusions.</p>
 </div>
 
-<div class="collapsible" onclick="toggleC(this)"><span class="c-title">Competitive vs. Noncompetitive vs. Uncompetitive Inhibition</span><span class="c-arrow">&#9660;</span></div>
-<div class="c-body">
+<button class="collapsible" onclick="toggleC(this)" aria-expanded="false" aria-controls="cbody-1"><span class="c-title">Competitive vs. Noncompetitive vs. Uncompetitive Inhibition</span><span class="c-arrow" aria-hidden="true">&#9660;</span></button>
+<div class="c-body" id="cbody-1" role="region">
 <p>Competitive: binds active site, increasing apparent Km, Vmax unchanged. Overcome by adding more substrate. Lineweaver-Burk: same y-intercept, different x-intercept.</p>
 <p>Noncompetitive: binds allosteric site, Km unchanged, Vmax decreases. More substrate does not help. Lineweaver-Burk: same x-intercept, different y-intercept.</p>
 <p>Uncompetitive: binds only the enzyme-substrate complex. Both apparent Km and Vmax decrease. Lineweaver-Burk: parallel lines. This is the one students forget most often.</p>
 <div class="warn"><div class="warn-label">The Trap</div>Competitive = x-intercept changes (same y). Noncompetitive = y-intercept changes (same x). Uncompetitive = parallel lines (both change proportionally). Mixed = both change, lines NOT parallel (intersect in second quadrant).</div>
 </div>
+<div class="worked">
+<div class="worked-hd">&#9998; Worked Example — Reading a Lineweaver-Burk Plot</div>
+<div class="worked-prompt">You are given two lines on a Lineweaver-Burk (1/V vs 1/[S]) plot. Control line: y-intercept = 0.020, x-intercept = −0.40. Inhibitor line: y-intercept = 0.020, x-intercept = −0.16. Identify the inhibitor type, calculate Vmax and Km for each condition, and explain what this means biologically.</div>
+<div class="step"><span class="sn">1</span><span class="st"><strong>Read the y-intercept first:</strong> y-intercept = 1/Vmax. Both lines share y-intercept = 0.020, so Vmax = 1/0.020 = 50 μmol/min for BOTH conditions. Vmax is unchanged → competitive inhibitor (this alone eliminates noncompetitive and uncompetitive).</span></div>
+<div class="step"><span class="sn">2</span><span class="st"><strong>Read the x-intercept:</strong> x-intercept = −1/Km. Control: −0.40, so Km = 1/0.40 = 2.5 mM. With inhibitor: −0.16, so apparent Km = 1/0.16 = 6.25 mM. Km increased 2.5× — the enzyme needs 2.5× more substrate to reach half-maximal velocity when the inhibitor is present.</span></div>
+<div class="step"><span class="sn">3</span><span class="st"><strong>Biological interpretation:</strong> The inhibitor competes directly with substrate for the active site. At low [S], the inhibitor wins (velocity is much lower than control). At very high [S], substrate outcompetes the inhibitor and velocity approaches Vmax — you can 'overcome' competitive inhibition by adding more substrate.</span></div>
+<div class="step"><span class="sn">4</span><span class="st"><strong>Quick contrast table:</strong> Same y-intercept only → competitive (Km ↑, Vmax unchanged). Same x-intercept only → noncompetitive (Km unchanged, Vmax ↓). Parallel lines → uncompetitive (both ↓ equally, can't overcome with substrate). Lines cross in Q2 → mixed (both change, not proportionally).</span></div>
+<div class="worked-ans">&#10003; The y-intercept tells you about Vmax (1/Vmax). The x-intercept tells you about Km (magnitude is 1/Km, negative sign). Same y = competitive. Same x = noncompetitive. Parallel = uncompetitive. Always start with y-intercept.</div>
+</div>
 
-<div class="collapsible" onclick="toggleC(this)"><span class="c-title">Sympathetic vs. Parasympathetic Nervous System</span><span class="c-arrow">&#9660;</span></div>
-<div class="c-body">
+<button class="collapsible" onclick="toggleC(this)" aria-expanded="false" aria-controls="cbody-2"><span class="c-title">Sympathetic vs. Parasympathetic Nervous System</span><span class="c-arrow" aria-hidden="true">&#9660;</span></button>
+<div class="c-body" id="cbody-2" role="region">
 <p>Sympathetic (fight/flight): short preganglionic (ACh at nicotinic), long postganglionic (NE at adrenergic). Exception: sweat glands use ACh (muscarinic). Adrenal medulla acts as a modified postganglionic neuron releasing epi/NE into blood. Origin: thoracolumbar (T1-L2).</p>
 <p>Parasympathetic (rest/digest): long preganglionic (ACh at nicotinic), short postganglionic (ACh at muscarinic). Vagus nerve = 75% of parasympathetic output. Origin: craniosacral.</p>
 <table class="rt"><tr><th>Feature</th><th>Sympathetic</th><th>Parasympathetic</th></tr>
@@ -304,38 +334,76 @@ table.rt code { font-family:var(--font-mono); font-size:0.85rem; color:var(--acc
 <tr><td>Pupil</td><td>Dilates (mydriasis)</td><td>Constricts (miosis)</td></tr></table>
 <div class="warn"><div class="warn-label">The Trap</div>BOTH preganglionic neurons release ACh at nicotinic receptors. The difference is postganglionic: sympathetic = NE at adrenergic, parasympathetic = ACh at muscarinic. Nicotinic = ion channel (fast). Muscarinic = GPCR (slow, second messenger).</div>
 </div>
+<div class="worked">
+<div class="worked-hd">&#9998; Worked Example — Predicting Drug Effects from Receptor Type</div>
+<div class="worked-prompt">A patient with hypertension AND asthma is prescribed propranolol (non-selective β-blocker). She develops severe wheezing. Separately, a patient with bradycardia is given atropine and his heart rate increases. Explain both outcomes using receptor pharmacology.</div>
+<div class="step"><span class="sn">1</span><span class="st"><strong>Propranolol + asthma:</strong> Propranolol blocks both β₁ (cardiac) AND β₂ (bronchiolar) receptors. In the lung, β₂ receptors are normally stimulated by epinephrine to cause bronchodilation (Gs → cAMP → protein kinase A → smooth muscle relaxation). Blocking β₂ removes this bronchodilation. Parasympathetic bronchoconstriction (via M₃ muscarinic receptors) now goes unopposed → airways narrow → wheezing. Solution: use a cardioselective β₁-blocker (metoprolol, atenolol) which spares β₂.</span></div>
+<div class="step"><span class="sn">2</span><span class="st"><strong>Atropine + bradycardia:</strong> Atropine is a competitive antagonist at all muscarinic receptors. At the SA node, vagal ACh activates M₂ receptors (Gi-coupled) → opens IKACh channels → K⁺ efflux → hyperpolarization → slows depolarization rate → bradycardia. Atropine blocks M₂ → removes parasympathetic 'brake' → sympathetic tone dominates → HR increases. Classic 'vagolytic' effect.</span></div>
+<div class="step"><span class="sn">3</span><span class="st"><strong>Pattern for naming drugs:</strong> '-olol' suffix = beta-blocker (adrenergic antagonist). '-tropine' or '-pium' suffix = anticholinergic (muscarinic antagonist). '-pril' suffix = ACE inhibitor. '-sartan' suffix = ARB (angiotensin receptor blocker). '-azide' = thiazide diuretic. Knowing drug class from name saves time on the MCAT.</span></div>
+<div class="step"><span class="sn">4</span><span class="st"><strong>Receptor type matters:</strong> Nicotinic receptors (at all autonomic ganglia, NMJ) are ligand-gated ion channels — fast, direct depolarization. Muscarinic receptors (at effector organs) are GPCRs — slow, second-messenger mediated. Curare blocks NMJ nicotinic → paralysis. Succinylcholine activates NMJ nicotinic → depolarizing block. These distinctions appear in anesthesia/pharmacology passages.</span></div>
+<div class="worked-ans">&#10003; Non-selective β-blockers are contraindicated in asthma because β₂ blockade causes bronchoconstriction. Atropine increases HR by blocking vagal M₂ receptors. Both examples show why receptor subtype specificity matters clinically — and on the MCAT.</div>
+</div>
 
-<div class="collapsible" onclick="toggleC(this)"><span class="c-title">DNA Replication vs. Transcription vs. Translation</span><span class="c-arrow">&#9660;</span></div>
-<div class="c-body">
+<button class="collapsible" onclick="toggleC(this)" aria-expanded="false" aria-controls="cbody-3"><span class="c-title">DNA Replication vs. Transcription vs. Translation</span><span class="c-arrow" aria-hidden="true">&#9660;</span></button>
+<div class="c-body" id="cbody-3" role="region">
 <p>Replication: copies entire genome, uses DNA polymerase, REQUIRES RNA primer, both strands copied, S phase. Leading strand continuous, lagging strand in Okazaki fragments joined by ligase.</p>
 <p>Transcription: copies one gene into mRNA, uses RNA polymerase, NO primer needed. Template strand read 3' to 5', mRNA made 5' to 3'. Eukaryotic processing: 5' cap, 3' poly-A tail, intron splicing.</p>
 <p>Translation: mRNA to protein at ribosome. Reads 5' to 3'. Protein built N-terminus to C-terminus. A, P, E sites. Peptidyl transferase is a ribozyme (rRNA, not protein).</p>
 <div class="warn"><div class="warn-label">The Trap</div>Replication REQUIRES a primer. Transcription does NOT. Also: replication uses dNTPs (deoxyribonucleotides), transcription uses NTPs (ribonucleotides). The MCAT exploits this distinction constantly.</div>
 </div>
+<div class="worked">
+<div class="worked-hd">&#9998; Worked Example — Tracing One Gene from DNA to Functional Protein</div>
+<div class="worked-prompt">The coding strand reads 5′-ATG-CCA-GAA-TGG-TAA-3′. Trace this gene all the way to its protein product, naming every molecule and enzyme involved.</div>
+<div class="step"><span class="sn">1</span><span class="st"><strong>Identify the template strand:</strong> RNA polymerase reads the template strand 3′→5′. The template is the complement of the coding strand, antiparallel: 3′-TAC-GGT-CTT-ACC-ATT-5′. Important: the mRNA sequence matches the coding strand (with U instead of T).</span></div>
+<div class="step"><span class="sn">2</span><span class="st"><strong>Transcription (nucleus):</strong> RNA pol II binds the promoter, no primer needed. Reads template 3′→5′, synthesizes pre-mRNA 5′→3′: 5′-AUG-CCA-GAA-UGG-UAA-3′. RNA pol uses ribonucleoside triphosphates (NTPs, not dNTPs). Releases pyrophosphate (PPi) as each nucleotide is added.</span></div>
+<div class="step"><span class="sn">3</span><span class="st"><strong>Eukaryotic RNA processing:</strong> (a) 5′ cap: 7-methylguanosine added co-transcriptionally — protects mRNA from exonucleases, required for ribosome recognition. (b) 3′ poly-A tail: ~200 adenines added after poly-A signal (AAUAAA) — promotes mRNA stability and export. (c) Splicing: spliceosomes remove introns, join exons. Alternative splicing → one gene, multiple protein isoforms.</span></div>
+<div class="step"><span class="sn">4</span><span class="st"><strong>Translation (cytoplasm):</strong> Ribosome (small 40S + large 60S) assembles at 5′ cap, scans to first AUG (start codon). Reads codons 5′→3′. Aminoacyl-tRNA brings amino acids to A site; peptidyl transferase (a ribozyme — the rRNA is catalytic) forms peptide bonds. Elongation: A site (new aa-tRNA) → P site (growing chain) → E site (empty tRNA exits). Stop codon UAA: release factor enters A site, chain released.</span></div>
+<div class="step"><span class="sn">5</span><span class="st"><strong>Protein product:</strong> AUG = Met, CCA = Pro, GAA = Glu, UGG = Trp, UAA = stop. Peptide: Met-Pro-Glu-Trp (4 amino acids, built N→C terminus). Post-translational modifications (phosphorylation, glycosylation, disulfide bonds) then occur.</span></div>
+<div class="worked-ans">&#10003; Key distinctions: (1) DNA pol REQUIRES primer; RNA pol does NOT. (2) Replication uses dNTPs; transcription uses NTPs. (3) Template is read 3′→5′; product grows 5′→3′. (4) Peptidyl transferase is a ribozyme (rRNA), not a protein enzyme — this is a classic MCAT trick.</div>
+</div>
 
-<div class="collapsible" onclick="toggleC(this)"><span class="c-title">Arteries vs. Veins: The Oxygenation Trap</span><span class="c-arrow">&#9660;</span></div>
-<div class="c-body">
+<button class="collapsible" onclick="toggleC(this)" aria-expanded="false" aria-controls="cbody-4"><span class="c-title">Arteries vs. Veins: The Oxygenation Trap</span><span class="c-arrow" aria-hidden="true">&#9660;</span></button>
+<div class="c-body" id="cbody-4" role="region">
 <p>Arteries carry blood AWAY from the heart (thick walls, elastic tissue, high pressure). Veins carry blood TO the heart (thin walls, valves, capacitance vessels holding 60-70% of blood). Capillaries are the exchange site (one cell thick, Starling forces).</p>
 <div class="warn"><div class="warn-label">The Trap</div>Arteries do NOT always carry oxygenated blood. Pulmonary arteries carry deoxygenated blood to the lungs. Umbilical arteries carry deoxygenated blood in fetal circulation. Arteries are defined by DIRECTION (away from heart), not oxygen content. Pulmonary veins carry oxygenated blood.</div>
 </div>
+<div class="worked">
+<div class="worked-hd">&#9998; Worked Example — Pulmonary Circulation — The Oxygenation Paradox</div>
+<div class="worked-prompt">A student writes: 'Arteries carry oxygenated blood to tissues; veins carry deoxygenated blood back.' Identify the error and trace blood through both the pulmonary and systemic circuits, naming the O₂ content at each vessel.</div>
+<div class="step"><span class="sn">1</span><span class="st"><strong>The rule — and why it fails:</strong> Arteries are defined by direction (AWAY from heart), not oxygen content. Veins are defined by direction (TOWARD heart). This works for the systemic circuit but breaks in the pulmonary circuit and fetal circulation.</span></div>
+<div class="step"><span class="sn">2</span><span class="st"><strong>Systemic circuit (the familiar case):</strong> Left ventricle → aorta (artery, oxygenated) → arterioles → capillaries (O₂ delivered, CO₂ picked up) → venules → vena cavae (veins, deoxygenated) → right atrium. Here arteries ARE oxygenated.</span></div>
+<div class="step"><span class="sn">3</span><span class="st"><strong>Pulmonary circuit (the exception):</strong> Right ventricle → pulmonary trunk → pulmonary arteries (ARTERY, but DEOXYGENATED — going to pick up O₂) → pulmonary capillaries around alveoli (gas exchange: CO₂ out, O₂ in) → pulmonary veins (VEIN, but OXYGENATED — returning to heart) → left atrium. Pulmonary artery: deoxygenated. Pulmonary vein: oxygenated. Opposite of what most students expect.</span></div>
+<div class="step"><span class="sn">4</span><span class="st"><strong>Fetal circulation bonus:</strong> Umbilical arteries (2) carry deoxygenated blood FROM fetus to placenta. Umbilical vein (1) carries oxygenated blood FROM placenta to fetus. Again: arteries going away from fetal 'heart equivalent,' not defined by O₂ content.</span></div>
+<div class="worked-ans">&#10003; Memorize by direction, not oxygen. 'Arteries Away' is all you need. Then apply it: pulmonary arteries go AWAY from the right heart toward the lungs (deoxygenated). Pulmonary veins return TOWARD the left heart (oxygenated). The MCAT will test this exact reversal.</div>
+</div>
 
-<div class="collapsible" onclick="toggleC(this)"><span class="c-title">Prokaryotic vs. Eukaryotic Gene Regulation</span><span class="c-arrow">&#9660;</span></div>
-<div class="c-body">
+<button class="collapsible" onclick="toggleC(this)" aria-expanded="false" aria-controls="cbody-5"><span class="c-title">Prokaryotic vs. Eukaryotic Gene Regulation</span><span class="c-arrow" aria-hidden="true">&#9660;</span></button>
+<div class="c-body" id="cbody-5" role="region">
 <p>Lac operon (inducible): default OFF. Lac repressor sits on operator. Allolactose removes repressor (induction). Maximum expression also requires low glucose (high cAMP, CAP-cAMP enhances transcription). Needs BOTH: lactose present AND glucose absent.</p>
 <p>Trp operon (repressible): default ON. Tryptophan binds repressor (corepressor), activating it to bind operator and shut down transcription. Also uses attenuation (leader sequence forms terminator hairpin when trp abundant).</p>
 <div class="warn"><div class="warn-label">The Trap</div>Inducible (lac): default OFF, inducer turns ON. Repressible (trp): default ON, corepressor turns OFF. Think: lac = light you switch on (inducer flips switch). Trp = light always on until timer shuts it off (corepressor is the timer).</div>
 </div>
+<div class="worked">
+<div class="worked-hd">&#9998; Worked Example — Predicting Lac Operon State Under Four Conditions</div>
+<div class="worked-prompt">Predict whether the lac operon produces HIGH, LOW, or NO β-galactosidase under each condition below. Show the logic — don't just state the answer.</div>
+<div class="step"><span class="sn">1</span><span class="st"><strong>Condition A — High glucose, no lactose:</strong> No allolactose present → repressor stays bound to operator → blocks transcription. Also: high glucose → adenylyl cyclase inhibited → cAMP low → CAP-cAMP complex cannot form → no positive activation either. Result: NO transcription. Double-off switch.</span></div>
+<div class="step"><span class="sn">2</span><span class="st"><strong>Condition B — Low glucose, no lactose:</strong> Low glucose → cAMP rises → CAP-cAMP binds upstream of promoter → RNA pol recruited (positive control active). BUT: no lactose → no allolactose → repressor still occupies operator → blocks transcription despite positive control. Result: NO transcription. Enhancement means nothing if the repressor is blocking.</span></div>
+<div class="step"><span class="sn">3</span><span class="st"><strong>Condition C — High glucose, lactose present:</strong> Lactose → allolactose formed → repressor removed from operator (negative control OFF). But: high glucose → low cAMP → no CAP-cAMP → no positive activation. Result: LOW transcription — basal level only, no enhancement.</span></div>
+<div class="step"><span class="sn">4</span><span class="st"><strong>Condition D — Low glucose, lactose present:</strong> Allolactose removes repressor (negative control OFF) AND low glucose → high cAMP → CAP-cAMP bound (positive control ON). Both requirements met simultaneously. Result: HIGH transcription — maximal β-galactosidase production.</span></div>
+<div class="step"><span class="sn">5</span><span class="st"><strong>The biological logic:</strong> The cell makes lactose-digesting enzymes ONLY when (1) lactose is actually available to digest AND (2) the preferred fuel (glucose) is absent. This is elegant metabolic economy — no wasted protein synthesis.</span></div>
+<div class="worked-ans">&#10003; The lac operon needs TWO independent signals for full expression: lactose present (removes repressor) AND glucose absent (provides CAP-cAMP enhancement). Missing either signal kills maximal expression. This two-factor logic is what makes the MCAT questions tricky.</div>
+</div>
 
-<div class="collapsible" onclick="toggleC(this)"><span class="c-title">Oxidative Phosphorylation vs. Substrate-Level Phosphorylation</span><span class="c-arrow">&#9660;</span></div>
-<div class="c-body">
+<button class="collapsible" onclick="toggleC(this)" aria-expanded="false" aria-controls="cbody-6"><span class="c-title">Oxidative Phosphorylation vs. Substrate-Level Phosphorylation</span><span class="c-arrow" aria-hidden="true">&#9660;</span></button>
+<div class="c-body" id="cbody-6" role="region">
 <p>Substrate-level (SLP): direct phosphate transfer from substrate to ADP. No O2 needed. Glycolysis (2 sites: phosphoglycerate kinase, pyruvate kinase) and TCA (succinyl-CoA synthetase makes GTP). Small ATP yield.</p>
 <p>Oxidative (OxPhos): ETC + chemiosmosis. NADH to Complex I, FADH2 to Complex II, electrons flow to O2 (final acceptor), protons pumped across inner mitochondrial membrane, ATP synthase uses gradient. ~30-32 ATP per glucose.</p>
 <div class="warn"><div class="warn-label">The Trap</div>If asked "where is ATP produced directly from glycolysis?" the answer is substrate-level phosphorylation. NOT oxidative phosphorylation, even though glycolysis produces NADH that feeds OxPhos. Also: glycolysis = cytoplasm, TCA = mitochondrial matrix, ETC = inner mitochondrial membrane. Location matters for poison questions.</div>
 </div>
-</div>
+</section>
 
 <!-- ===== GENETICS & DISEASE ===== -->
-<div class="section" id="sec-genetics">
+<section class="section" id="sec-genetics" role="tabpanel" aria-labelledby="tab-genetics" tabindex="-1">
 <div class="sg-section">
 <h2>Mitosis vs. Meiosis: The Complete Comparison</h2>
 <div class="card">
@@ -355,6 +423,16 @@ table.rt code { font-family:var(--font-mono); font-size:0.85rem; color:var(--acc
 <tr><td>What separates</td><td>Sister chromatids</td><td>I: Homologs, II: Sisters</td></tr>
 <tr><td>Ploidy result</td><td>2n to 2n</td><td>2n to n</td></tr></table>
 <div class="warn"><div class="warn-label">Chromosome Counting</div>A human somatic cell: 46 chromosomes. After S phase: still 46 chromosomes (92 chromatids). A chromosome = one centromere, regardless of chromatid count. After meiosis I: 23 chromosomes (each = 2 chromatids). After meiosis II: 23 chromosomes (each = 1 chromatid). "How many chromosomes" and "how much DNA" are DIFFERENT questions.</div>
+<div class="worked">
+<div class="worked-hd">&#9998; Worked Example — Chromosome Counting Through Meiosis</div>
+<div class="worked-prompt">A human cell (2n = 46) enters meiosis. Determine the chromosome number AND chromatid number at each of these five checkpoints: (1) G1, (2) after S phase, (3) after Meiosis I, (4) after Meiosis II, (5) after fertilization.</div>
+<div class="step"><span class="sn">1</span><span class="st"><strong>G1 (before S phase):</strong> 46 chromosomes, each consisting of 1 chromatid (1 DNA molecule). Total chromatids: 46. Ploidy: 2n (diploid). This is the starting state.</span></div>
+<div class="step"><span class="sn">2</span><span class="st"><strong>After S phase (before Meiosis I):</strong> DNA has replicated. Each chromosome now consists of 2 sister chromatids held at the centromere. Still 46 chromosomes (centromere count = chromosome count), but now 92 chromatids. Ploidy: still 2n (S phase doesn't change ploidy, just chromatid count).</span></div>
+<div class="step"><span class="sn">3</span><span class="st"><strong>After Meiosis I:</strong> Homologous chromosomes separated (reductional division). Each daughter cell has 23 chromosomes, each still consisting of 2 sister chromatids. So: 23 chromosomes, 46 chromatids per cell. Ploidy: now n (haploid) but with replicated DNA. This is the confusing state — haploid chromosome number but still 2 chromatids per chromosome.</span></div>
+<div class="step"><span class="sn">4</span><span class="st"><strong>After Meiosis II:</strong> Sister chromatids separated (like mitosis). Each of the 4 daughter cells has 23 chromosomes, each now with 1 chromatid. 23 chromosomes, 23 chromatids. Ploidy: n. These are the gametes.</span></div>
+<div class="step"><span class="sn">5</span><span class="st"><strong>After fertilization:</strong> Sperm (23 chromosomes) + egg (23 chromosomes) → zygote with 46 chromosomes. Ploidy restored to 2n. Each chromosome now has 1 chromatid (before S phase of first mitosis). The cycle begins again.</span></div>
+<div class="worked-ans">&#10003; Key distinction: 'How many chromosomes?' = count centromeres. 'How many chromatids?' = count DNA strands. After S phase: 46 chr, 92 chromatids. After Meiosis I: 23 chr, 46 chromatids. After Meiosis II: 23 chr, 23 chromatids. The MCAT exploits the gap between chromosome count and chromatid count constantly.</div>
+</div>
 </div>
 </div>
 
@@ -377,6 +455,16 @@ table.rt code { font-family:var(--font-mono); font-size:0.85rem; color:var(--acc
 <p>Males hemizygous (one X = disease). Females usually carriers. No male-to-male transmission. Carrier mother x normal father: 50% sons affected, 50% daughters carriers. Examples: Hemophilia A/B, Duchenne muscular dystrophy (dystrophin), red-green color blindness, G6PD deficiency.</p>
 <div class="warn"><div class="warn-label">The Trap</div>If you see male-to-male transmission in a pedigree, the trait CANNOT be X-linked. Fathers give sons the Y, not the X. This single observation eliminates X-linked from consideration.</div>
 </div>
+<div class="worked">
+<div class="worked-hd">&#9998; Worked Example — Solving a Pedigree from Scratch</div>
+<div class="worked-prompt">In a pedigree: Gen I — unaffected father × unaffected mother → Gen II — one affected son, three unaffected children (2 sons, 1 daughter). The affected son in Gen II marries an unaffected woman and has one affected son and one unaffected daughter in Gen III. Determine the inheritance pattern and carrier status of all individuals.</div>
+<div class="step"><span class="sn">1</span><span class="st"><strong>Step 1 — Dominant or recessive?</strong> Two unaffected parents (Gen I) produce an affected child (Gen II). This is only possible if the trait is recessive: both parents carry one copy but don't show it (carriers = Aa). If it were dominant, at least one parent would be affected.</span></div>
+<div class="step"><span class="sn">2</span><span class="st"><strong>Step 2 — Autosomal or X-linked?</strong> Check sex distribution: affected individuals are males only across both generations. Is there male-to-male transmission? Gen II affected son → Gen III affected son. Father gives son his Y chromosome, not his X. So if affected son passes it to his son, it CANNOT be on the X chromosome. It must be autosomal recessive.</span></div>
+<div class="step"><span class="sn">3</span><span class="st"><strong>Step 3 — Assign genotypes:</strong> Gen I parents: both Aa (carriers). Gen II affected son: aa. Gen III: affected son (aa) ← his mother must be a carrier (Aa) since Gen II affected father is aa and contributed 'a'. Unaffected Gen III daughter: either AA or Aa (2/3 chance she is Aa by conditional probability).</span></div>
+<div class="step"><span class="sn">4</span><span class="st"><strong>Step 4 — The conditional probability trap:</strong> If asked: 'The unaffected Gen III daughter wants to know if she is a carrier' — the answer is 2/3, not 1/2. Why? Given she is unaffected, the sample space is {AA, Aa, Aa} from a 1:2:1 cross — 3 unaffected outcomes, 2 of which are carriers. 2/3 is carrier probability conditional on being unaffected.</span></div>
+<div class="step"><span class="sn">5</span><span class="st"><strong>The male-to-male rule:</strong> Male-to-male transmission (father → son) can ONLY occur with autosomal or Y-linked traits, never X-linked. This single observation is the fastest way to eliminate X-linked from a pedigree. Conversely, no male-to-male transmission + only males affected + carrier mothers = strong evidence for X-linked recessive.</span></div>
+<div class="worked-ans">&#10003; Algorithm: (1) Affected child from two unaffected parents → recessive. (2) Male-to-male transmission → autosomal (never X-linked). (3) Only males affected, no male-to-male → X-linked recessive. (4) Both sexes affected equally → autosomal. (5) Every generation affected, one parent always affected → dominant.</div>
+</div>
 
 <div class="card">
 <h3>Trinucleotide Repeat Disorders (Anticipation)</h3>
@@ -394,10 +482,10 @@ table.rt code { font-family:var(--font-mono); font-size:0.85rem; color:var(--acc
 <div class="warn"><div class="warn-label">Common Confusion</div>Monosomy X (Turner) is viable, but autosomal monosomy is not. Turner individuals survive because humans normally only use one X anyway (the other is Barr body). However, X-inactivation is not complete (some genes escape), explaining Turner phenotypic features.</div>
 </div>
 </div>
+</section>
 
-</div>
 <!-- ===== ORGANIC REACTIONS (FIXED) ===== -->
-<div class="section" id="sec-ochem">
+<section class="section" id="sec-ochem" role="tabpanel" aria-labelledby="tab-ochem" tabindex="-1">
 <div class="sg-section">
 <h2>Organic Chemistry: Strategy Over Memorization</h2>
 <p>The MCAT tests whether you understand reaction mechanisms at a conceptual level and can predict products for unfamiliar molecules. The key is understanding fundamental principles that let you reason through any reaction.</p>
@@ -431,6 +519,15 @@ table.rt code { font-family:var(--font-mono); font-size:0.85rem; color:var(--acc
 <tr><td>3&deg;</td><td>E2</td><td>E2</td><td>E2</td><td>SN1/E1 mix</td></tr></table>
 <div class="tip"><div class="tip-label">Decision Shortcut</div>Step 1: Substrate. 3&deg; = no SN2. Methyl/1&deg; = no SN1/E1. Step 2: Nucleophile/base strength. Strong unhindered nuc = SN2. Strong bulky base = E2. Weak = SN1/E1 (if stable carbocation). Step 3: Solvent. Polar protic = SN1/E1. Polar aprotic = SN2/E2. Step 4: Heat = elimination.</div>
 </div>
+<div class="worked">
+<div class="worked-hd">&#9998; Worked Example — Choosing the Right Substitution/Elimination Pathway</div>
+<div class="worked-prompt">For each of the four scenarios, predict the major product and mechanism. Show your decision logic step by step before naming the pathway.</div>
+<div class="step"><span class="sn">1</span><span class="st"><strong>Scenario A — CH₃Br + NaCN in DMSO:</strong> Substrate: methyl bromide (primary, minimal steric bulk — best for backside attack). Nucleophile: CN⁻ (strong nucleophile, not bulky). Solvent: DMSO (polar aprotic — stabilizes Nu⁻ without hydrogen bonding, favors SN2). Decision: primary + strong nuc + polar aprotic = SN2. Product: CH₃CN (acetonitrile). Inverted stereochemistry (not relevant here since methyl has no chirality).</span></div>
+<div class="step"><span class="sn">2</span><span class="st"><strong>Scenario B — (CH₃)₃CBr + H₂O, heat:</strong> Substrate: tertiary (3 bulky methyl groups — SN2 impossible, too hindered). Nucleophile: H₂O (weak nucleophile). Solvent: water (polar protic — stabilizes carbocation and leaving group). Heat: favors elimination. Decision: tertiary + weak nuc + polar protic + heat → E1 (carbocation forms, then base abstracts β-H). Some SN1 also occurs (competition). Major: alkene via E1.</span></div>
+<div class="step"><span class="sn">3</span><span class="st"><strong>Scenario C — (CH₃)₃CBr + KOtBu in tBuOH:</strong> Substrate: tertiary. Base: KOtBu (potassium tert-butoxide — STRONG and very BULKY). Bulky base cannot attack the carbon center (SN2 blocked) and sterically prefers to grab an exposed β-hydrogen instead. Decision: tertiary + strong bulky base = E2. Anti-periplanar geometry required. Major: most substituted alkene (Zaitsev).</span></div>
+<div class="step"><span class="sn">4</span><span class="st"><strong>Scenario D — (R)-2-bromobutane + NaOH in acetone:</strong> Substrate: secondary chiral center. Nucleophile: OH⁻ (strong). Solvent: acetone (polar aprotic — favors SN2). Decision: secondary + strong nuc + polar aprotic = SN2. Backside attack inverts configuration → product is (S)-2-butanol. Stereochemistry is inverted (Walden inversion) — this is always true for SN2 at a chiral center.</span></div>
+<div class="worked-ans">&#10003; Decision flowchart: (1) Substrate degree? 3° → no SN2. Methyl/1° → no SN1/E1. (2) Nucleophile/base? Strong unhindered nuc → SN2. Strong bulky base → E2. Weak → SN1/E1 if stable carbocation. (3) Solvent? Polar aprotic → SN2/E2. Polar protic → SN1/E1. (4) Heat? → favor elimination. Apply in this order every time.</div>
+</div>
 </div>
 
 <div class="sg-section">
@@ -453,6 +550,15 @@ table.rt code { font-family:var(--font-mono); font-size:0.85rem; color:var(--acc
 <p>Nucleophilic acyl substitution (has a leaving group, unlike aldehydes/ketones). Reactivity: acid chloride > anhydride > ester > amide (least reactive, N donates electrons via resonance). You can go DOWN the ladder but not UP without special reagents.</p>
 <div class="warn"><div class="warn-label">Commonly Confused</div>Nucleophilic addition (aldehydes/ketones, no leaving group, tetrahedral product) vs. nucleophilic acyl substitution (acid derivatives, has leaving group, C=O restored). Peptide bond formation IS nucleophilic acyl substitution.</div>
 </div>
+<div class="worked">
+<div class="worked-hd">&#9998; Worked Example — Predicting Carbonyl Reaction Products</div>
+<div class="worked-prompt">Identify the major product of each reaction and name the reaction type. Approach each systematically: identify the electrophile, identify the nucleophile, predict the attack site.</div>
+<div class="step"><span class="sn">1</span><span class="st"><strong>Reaction 1 — Pentanal + NaBH₄ in MeOH:</strong> Electrophile: aldehyde carbonyl carbon (δ+, electrophilic). Nucleophile: H⁻ (hydride from NaBH₄). Attack: H⁻ adds to carbonyl C from above or below → tetrahedral intermediate → protonation by MeOH solvent. Product: 1-pentanol (primary alcohol). NaBH₄ reduces aldehydes → 1° alcohols and ketones → 2° alcohols. Cannot reduce esters or carboxylic acids (too mild).</span></div>
+<div class="step"><span class="sn">2</span><span class="st"><strong>Reaction 2 — Cyclohexanone + CH₃MgBr (Grignard) then H₃O⁺:</strong> Nucleophile: CH₃⁻ (carbanion equivalent from Grignard). Electrophile: ketone carbonyl carbon. Attack: methyl carbanion adds to carbonyl C → magnesium alkoxide intermediate → aqueous workup (H₃O⁺) protonates → tertiary alcohol (cyclohexanol with methyl group at the ring carbon). Grignard reagents form C–C bonds — their power is making new carbon skeletons.</span></div>
+<div class="step"><span class="sn">3</span><span class="st"><strong>Reaction 3 — Acetic acid + ethanol + H⁺ catalyst:</strong> This is a Fischer esterification (nucleophilic acyl substitution). OH of carboxylic acid is activated by protonation. Ethanol acts as nucleophile, attacks carbonyl carbon. Tetrahedral intermediate collapses with loss of water. Product: ethyl acetate + water. Reversible — push equilibrium by removing water (Dean-Stark trap) or using excess alcohol.</span></div>
+<div class="step"><span class="sn">4</span><span class="st"><strong>Reaction 4 — Methyl acetate + LiAlH₄ then H₃O⁺:</strong> LiAlH₄ is a stronger hydride donor than NaBH₄ — can reduce esters, carboxylic acids, amides. Ester: two hydrides delivered total. First hydride → aldehyde intermediate (which is immediately reduced again). Final product: two alcohols — methanol (from the methoxy leaving group) + ethanol (from the acyl portion). LiAlH₄ always reduces esters to two alcohols.</span></div>
+<div class="worked-ans">&#10003; Carbonyl reactions: identify the electrophilic C (δ+), identify nucleophile, predict addition (aldehydes/ketones — no leaving group) vs substitution (acid derivatives — has leaving group). Reactivity hierarchy: acid chloride > anhydride > ester > amide. NaBH₄ reduces aldehydes/ketones only. LiAlH₄ reduces everything. Grignard adds carbon.</div>
+</div>
 
 <div class="card">
 <h3>Oxidation/Reduction and Leaving Groups</h3>
@@ -461,11 +567,10 @@ table.rt code { font-family:var(--font-mono); font-size:0.85rem; color:var(--acc
 <div class="warn"><div class="warn-label">The Trap</div>If you see an alcohol and pick SN2 with OH as leaving group, you are WRONG. Hydroxide is a terrible leaving group. The alcohol must be protonated first (making water the LG) or converted to a tosylate/halide.</div>
 </div>
 </div>
-</div>
-
+</section>
 
 <!-- ===== MCAT TIPS ===== -->
-<div class="section" id="sec-tips">
+<section class="section" id="sec-tips" role="tabpanel" aria-labelledby="tab-tips" tabindex="-1">
 <div class="sg-section">
 <h2>MCAT Test-Taking Strategy</h2>
 <p>The MCAT is not a knowledge test. It is a reasoning test that uses knowledge as raw material. Students who memorize everything but cannot apply it under time pressure score lower than students who understand core principles and practice strategic test-taking. These tips come from patterns in how the MCAT constructs questions and answer choices.</p>
@@ -562,6 +667,15 @@ table.rt code { font-family:var(--font-mono); font-size:0.85rem; color:var(--acc
 <p><strong>D.</strong> 100:1</p>
 <div class="tip"><div class="tip-label">Answer: C</div>Apply Henderson-Hasselbalch: pH = pKa + log([A-]/[HA]). Substituting: 5.76 = 4.76 + log([A-]/[HA]). Therefore log([A-]/[HA]) = 1.0, which means [A-]/[HA] = 10/1. The pH is exactly one unit above the pKa, so there is ten times more conjugate base (acetate) than acid (acetic acid). When HCl is added, it will convert some acetate back to acetic acid, and the pH will decrease slightly but will be resisted by the buffer.</div>
 </div>
+<div class="worked">
+<div class="worked-hd">&#9998; Worked Example — Henderson-Hasselbalch: Three Problem Types</div>
+<div class="worked-prompt">Master these three problem types that appear repeatedly on the MCAT.</div>
+<div class="step"><span class="sn">1</span><span class="st"><strong>Type 1 — Find the ratio given pH and pKa:</strong> Problem: A buffer contains acetic acid (pKa = 4.76). The solution pH is 5.76. What is the ratio of acetate (A⁻) to acetic acid (HA)? Apply HH: pH = pKa + log([A⁻]/[HA]). 5.76 = 4.76 + log([A⁻]/[HA]). log([A⁻]/[HA]) = 1.00. [A⁻]/[HA] = 10¹ = 10. Answer: 10:1. pH is 1 unit above pKa → 10× more conjugate base than acid. Quick rule: every pH unit above pKa = 10× more deprotonated form.</span></div>
+<div class="step"><span class="sn">2</span><span class="st"><strong>Type 2 — Find pH given concentrations:</strong> Problem: A buffer has 0.10 M acetic acid and 0.30 M sodium acetate (pKa = 4.76). Find the pH. pH = 4.76 + log(0.30/0.10) = 4.76 + log(3) = 4.76 + 0.48 = 5.24. The pH is above the pKa because there is more conjugate base than acid. If equal amounts: pH = pKa exactly (maximum buffering capacity).</span></div>
+<div class="step"><span class="sn">3</span><span class="st"><strong>Type 3 — Amino acid charge state:</strong> Problem: Alanine has pKa1 = 2.35 (α-COOH) and pKa2 = 9.69 (α-NH₃⁺). What is the net charge at physiological pH (7.4)? α-COOH: pKa 2.35 << 7.4 → fully deprotonated → COO⁻ (charge −1). α-NH₃⁺: pKa 9.69 >> 7.4 → still protonated → NH₃⁺ (charge +1). Net charge = −1 + 1 = 0 (zwitterion). pI = (2.35 + 9.69)/2 = 6.02 (the pH at which net charge = 0).</span></div>
+<div class="step"><span class="sn">4</span><span class="st"><strong>Bonus — charge state determines gel migration:</strong> In gel electrophoresis at pH 8.0, which direction does lysine (pI = 9.74) migrate? At pH 8.0, which is BELOW pI 9.74, lysine carries a net positive charge (not yet lost proton from side chain −NH₃⁺). Positive charge → migrates toward the negative cathode. At pH 8.0 above pI (Asp, pI = 2.77), the amino acid is negatively charged → migrates toward positive anode.</span></div>
+<div class="worked-ans">&#10003; Three HH applications: (1) pH − pKa = log([A⁻]/[HA]) → find ratio. (2) Know the ratio + pKa → find pH. (3) Compare pH to pKa for each ionizable group → assign charge → sum for net charge. For isoelectric point: pI = average of the two pKa values flanking the neutral/zwitterionic form.</div>
+</div>
 </div>
 
 <div class="sg-section">
@@ -601,6 +715,15 @@ table.rt code { font-family:var(--font-mono); font-size:0.85rem; color:var(--acc
 <p><strong>D.</strong> Competitive inhibitor; apparent Km decreases</p>
 <div class="tip"><div class="tip-label">Answer: A</div>Same y-intercept means Vmax is unchanged (1/Vmax is the same). The x-intercept moved toward zero, meaning -1/Km got closer to zero, which means Km increased (it takes more substrate to reach half-Vmax). This is the signature of competitive inhibition: the inhibitor competes with substrate for the active site, but at sufficiently high substrate concentrations, substrate outcompetes the inhibitor and Vmax is achieved.</div>
 </div>
+<div class="worked">
+<div class="worked-hd">&#9998; Worked Example — Enzyme Kinetics: From Graph to Numbers to Biology</div>
+<div class="worked-prompt">An enzyme follows Michaelis-Menten kinetics. From the data below, extract Km and Vmax, then answer three biological questions. Data: at [S] = 2 μM, V = 0.33 Vmax; at [S] = 10 μM, V = 0.71 Vmax.</div>
+<div class="step"><span class="sn">1</span><span class="st"><strong>Extract Km from the data:</strong> Use the Michaelis-Menten equation: V = Vmax·[S]/(Km + [S]). At V = 0.50 Vmax, [S] = Km by definition. We don't have that exact point, but we can confirm consistency: if Km = 5 μM, then at [S] = 2 μM: V = Vmax(2)/(5+2) = 0.286 Vmax. Close to 0.33, confirming Km ≈ 4 μM (solve exactly: 0.33 = [S]/(Km+[S]) → 0.33Km + 0.33(2) = 2 → Km ≈ 4 μM).</span></div>
+<div class="step"><span class="sn">2</span><span class="st"><strong>What does Km mean biologically?</strong> Km ≈ 4 μM is the substrate concentration at half-maximal velocity — a measure of binding affinity. LOW Km = HIGH affinity (enzyme reaches half-Vmax at low substrate concentration). HIGH Km = LOW affinity. Hexokinase (low Km for glucose) is always busy; glucokinase (high Km) only activates when glucose is abundant — this is why glucokinase acts as a glucose sensor in the liver and pancreatic beta cells.</span></div>
+<div class="step"><span class="sn">3</span><span class="st"><strong>Competitive inhibitor shifts the curve:</strong> If a competitive inhibitor is added and the new apparent Km doubles to 8 μM (Vmax unchanged), what does this mean experimentally? At [S] = 4 μM (= old Km), the new V = Vmax(4)/(8+4) = 0.33 Vmax instead of 0.50 Vmax. The enzyme needs twice as much substrate to reach half-Vmax. Adding more substrate (raising [S] >> 8 μM) restores Vmax.</span></div>
+<div class="step"><span class="sn">4</span><span class="st"><strong>Cooperativity vs Michaelis-Menten:</strong> If a substrate-velocity curve is S-shaped (sigmoidal) instead of hyperbolic, the enzyme shows positive cooperativity (Hill coefficient n > 1). Example: binding of the first substrate molecule causes a conformational change that increases affinity for subsequent molecules. Hemoglobin (n ≈ 2.8) shows this — the sigmoidal curve allows efficient O₂ loading in lungs (high pO₂) and efficient unloading in tissues (low pO₂). A hyperbolic curve (myoglobin, n = 1) cannot do this.</span></div>
+<div class="worked-ans">&#10003; Km = [S] at half-Vmax = measure of affinity (low Km = high affinity). Vmax = maximum rate (proportional to total enzyme concentration). Competitive inhibitor: Km increases, Vmax unchanged. Noncompetitive: Km unchanged, Vmax decreases. Sigmoidal curve = cooperativity. Hyperbolic curve = no cooperativity.</div>
+</div>
 </div>
 
 <div class="sg-section">
@@ -626,6 +749,15 @@ table.rt code { font-family:var(--font-mono); font-size:0.85rem; color:var(--acc
 <tr><td>Free energy and cell potential</td><td><code>delta G-naught = -nFE-naught</code></td><td>Positive E-naught means negative delta G-naught (spontaneous)</td></tr>
 <tr><td>Nernst equation</td><td><code>E = E-naught - (0.0592/n)log(Q)</code></td><td>Cell potential under non-standard conditions</td></tr></table>
 <div class="tip"><div class="tip-label">Sign Conventions</div>These three equations are all saying the same thing in different languages. Spontaneous reactions have: negative delta G, positive E-naught (cell potential), and K greater than 1. If you know any one of these, you can determine the others. The MCAT frequently asks you to convert between them.</div>
+</div>
+<div class="worked">
+<div class="worked-hd">&#9998; Worked Example — Thermodynamics: Connecting ΔG, K, and Ecell</div>
+<div class="worked-prompt">Three problems that test the same concept in different languages. Solve each, then identify the unifying principle.</div>
+<div class="step"><span class="sn">1</span><span class="st"><strong>Problem 1 — ΔG from K:</strong> An enzyme-catalyzed reaction has Keq = 1000 at 37°C (310 K). Calculate ΔG°. Use: ΔG° = −RT ln(K). R = 8.314 J/(mol·K). ΔG° = −(8.314)(310) ln(1000) = −(2577)(6.908) = −17,800 J/mol ≈ −17.8 kJ/mol. Negative ΔG° confirms the reaction is spontaneous under standard conditions. Large K → strongly negative ΔG° → products strongly favored.</span></div>
+<div class="step"><span class="sn">2</span><span class="st"><strong>Problem 2 — Spontaneity from cell potential:</strong> An electrochemical cell has E°cell = +0.40 V and involves n = 2 electrons. Is it spontaneous? ΔG° = −nFE° = −(2)(96,485)(0.40) = −77,188 J ≈ −77.2 kJ/mol. Negative ΔG° = spontaneous. Rule: positive E° always means negative ΔG° = spontaneous forward reaction. If you see E°cell > 0, the reaction runs as written.</span></div>
+<div class="step"><span class="sn">3</span><span class="st"><strong>Problem 3 — Does ΔG° = 0 mean no reaction?</strong> Crucial distinction: ΔG° = 0 means K = 1 (products and reactants at equal concentration at equilibrium). It does NOT mean the reaction won't occur. The ACTUAL driving force is ΔG = ΔG° + RT ln(Q). If Q < K (product concentration is low), the RT ln(Q) term is very negative, making ΔG negative even if ΔG° is positive. Cells exploit this by continuously removing products (e.g., consuming glucose-6-phosphate as fast as it's made).</span></div>
+<div class="step"><span class="sn">4</span><span class="st"><strong>The three-way equivalence:</strong> Spontaneous reaction: ΔG < 0 ↔ E°cell > 0 ↔ K > 1. These three say the same thing in three different units. On the MCAT, if you know any one, you can determine the others. The key equations: ΔG° = −RT ln K (thermodynamic language), ΔG° = −nFE° (electrochemical language), and ΔG = ΔG° + RT ln Q (actual vs. standard conditions).</span></div>
+<div class="worked-ans">&#10003; Positive E° = negative ΔG = spontaneous = K > 1. Enzymes do NOT change ΔG — they lower activation energy (Ea) and speed up the reaction, but cannot change equilibrium. ΔG vs ΔG°: ΔG° is at standard conditions; ΔG is at actual cellular conditions where concentrations are far from 1 M.</div>
 </div>
 </div>
 
@@ -673,6 +805,15 @@ table.rt code { font-family:var(--font-mono); font-size:0.85rem; color:var(--acc
 <tr><td>Wave speed</td><td><code>v = f * lambda</code></td><td>Relating frequency to wavelength</td></tr>
 <tr><td>Doppler</td><td><code>f' = f(v +/- vo)/(v -/+ vs)</code></td><td>Frequency shifts from moving source/observer</td></tr>
 <tr><td>Radioactive decay</td><td><code>N = N0 * (1/2)^(t/t-half)</code></td><td>Half-life calculations</td></tr></table>
+</div>
+<div class="worked">
+<div class="worked-hd">&#9998; Worked Example — Fluids and Circuits: Two Worked Problems</div>
+<div class="worked-prompt">Apply Bernoulli's principle and Ohm's law to biological scenarios, showing the parallel structure between fluid flow and electrical circuits.</div>
+<div class="step"><span class="sn">1</span><span class="st"><strong>Fluids — Arterial Stenosis:</strong> A coronary artery is 50% narrowed (cross-sectional area reduced to half). Normal blood velocity is 0.3 m/s. What happens to velocity and pressure at the stenosis? Use continuity (A₁V₁ = A₂V₂): V₂ = V₁·(A₁/A₂) = 0.3 × (A₁/0.5A₁) = 0.6 m/s (velocity doubles). Use Bernoulli: higher velocity → lower pressure at stenosis. This lower pressure can cause partial arterial collapse (explains angina mechanism) and creates turbulence heard as a bruit.</span></div>
+<div class="step"><span class="sn">2</span><span class="st"><strong>Fluids — Why capillaries are slowest:</strong> Total cross-sectional area of ALL capillaries combined vastly exceeds that of the aorta. Continuity equation (A₁V₁ = A₂V₂) applies to the entire circulation: as total area increases, velocity must decrease. This is why capillary blood flow is slowest (~0.03 cm/s vs aorta ~30 cm/s) — slow flow maximizes time for gas and nutrient exchange. This is NOT because capillaries are longer; it's purely area/velocity relationship.</span></div>
+<div class="step"><span class="sn">3</span><span class="st"><strong>Circuits — Series vs. Parallel resistors:</strong> Two resistors: R₁ = 4 Ω, R₂ = 6 Ω, voltage = 12 V. In series: R_total = 4 + 6 = 10 Ω. Current = V/R = 12/10 = 1.2 A (same through each). Voltage drop: V₁ = 1.2×4 = 4.8 V; V₂ = 1.2×6 = 7.2 V (add to 12 V ✓). In parallel: 1/R_total = 1/4 + 1/6 = 5/12. R_total = 2.4 Ω (LESS than either alone). Current = 12/2.4 = 5 A total, split proportionally.</span></div>
+<div class="step"><span class="sn">4</span><span class="st"><strong>Biological circuit analogy:</strong> Blood vessels in parallel (systemic circulation): resistance DECREASES as vessels are added in parallel → blood can reach more tissue beds simultaneously. Vasodilation of one vascular bed doesn't starve others because the parallel arrangement keeps total resistance manageable. Capillaries in series with arterioles: resistance adds up → arterioles are the main site of resistance regulation (the 'resistors' of the circulatory circuit, controlled by smooth muscle tone).</span></div>
+<div class="worked-ans">&#10003; Bernoulli: faster flow = lower pressure (stenosis → low pressure → turbulence/collapse). Continuity: A₁V₁ = A₂V₂ (capillaries slowest because total area largest). Circuits: series = resistances add (current same, voltage splits). Parallel = reciprocals add (voltage same, current splits, total R < any individual R). Biological circulation = mostly parallel arrangement.</div>
 </div>
 </div>
 
@@ -760,16 +901,40 @@ table.rt code { font-family:var(--font-mono); font-size:0.85rem; color:var(--acc
 
 
 
-</div>
+</section>
+</main>
 <script>
 
-const sections = ['practice','systems','confused','genetics','ochem','tips'];
-function showSection(id) {
-  sections.forEach(s => document.getElementById('sec-'+s).classList.toggle('active', s===id));
-  document.querySelectorAll('.nav button').forEach((b,i) => b.classList.toggle('active', sections[i]===id));
+(function(){
+'use strict';
+var secs=['practice','systems','confused','genetics','ochem','tips'];
+window.showSection=function(id,btn){
+  secs.forEach(function(s){
+    var p=document.getElementById('sec-'+s), t=document.getElementById('tab-'+s);
+    if(p) p.classList.toggle('active',s===id);
+    if(t) t.setAttribute('aria-selected',s===id?'true':'false');
+  });
+  var panel=document.getElementById('sec-'+id);
+  if(panel) panel.focus();
   window.scrollTo({top:0,behavior:'smooth'});
-}
-function toggleC(el) { el.classList.toggle('open'); el.nextElementSibling.classList.toggle('open'); }
+};
+window.toggleC=function(el){
+  var open=el.getAttribute('aria-expanded')==='true';
+  el.setAttribute('aria-expanded',open?'false':'true');
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('open');
+};
+document.querySelectorAll('nav button[role="tab"]').forEach(function(b,i,all){
+  b.addEventListener('keydown',function(e){
+    var nx;
+    if(e.key==='ArrowRight') nx=all[(i+1)%all.length];
+    else if(e.key==='ArrowLeft') nx=all[(i-1+all.length)%all.length];
+    else if(e.key==='Home') nx=all[0];
+    else if(e.key==='End') nx=all[all.length-1];
+    if(nx){nx.focus();nx.click();}
+  });
+});
+}());
 
 let currentDiff=3, correct=0, wrong=0, total=0, answered=false, activeTopic='all', currentQ=null, usedQs=new Set();
 const diffLabels={1:'1 \u2014 Foundational',2:'2 \u2014 Developing',3:'3 \u2014 Medium',4:'4 \u2014 Challenging',5:'5 \u2014 MCAT Hard'};
@@ -870,7 +1035,7 @@ function renderQuestion(q) {
   html+='<div class="q-stem">'+q.stem+'</div>';
   html+='<div class="q-opts">';
   q.opts.forEach((o,i)=>{
-    html+='<div class="q-opt" onclick="selectOpt(this,'+i+')" data-idx="'+i+'"><span class="q-opt-letter">'+letters[i]+'</span><span>'+o+'</span></div>';
+    html+='<button type="button" class="q-opt" onclick="selectOpt(this,'+i+')" data-idx="'+i+'" aria-pressed="false"><span class="q-opt-letter" aria-hidden="true">'+letters[i]+'</span><span>'+o+'</span></button>';
   });
   html+='</div>';
   html+='<div style="margin-top:1rem;"><button class="q-submit" onclick="submitAnswer()" id="btn-submit">Check Answer</button></div>';
@@ -885,8 +1050,8 @@ function renderQuestion(q) {
 let selectedIdx=-1;
 function selectOpt(el,idx) {
   if(answered) return;
-  document.querySelectorAll('.q-opt').forEach(o=>o.classList.remove('selected'));
-  el.classList.add('selected'); selectedIdx=idx;
+  document.querySelectorAll('.q-opt').forEach(o=>{o.classList.remove('selected');o.setAttribute('aria-pressed','false');});
+  el.classList.add('selected'); el.setAttribute('aria-pressed','true'); selectedIdx=idx;
   document.getElementById('btn-submit').disabled=false;
 }
 
@@ -921,13 +1086,13 @@ initTopicFilters();
 
 
 </script>
-  <div style="max-width: 800px; margin: 40px auto; padding: 20px 30px; background: #fff8e1; border-left: 4px solid #f9a825; border-radius: 8px; font-size: 14px; line-height: 1.6; color: #555;">
-  <div style="font-weight: bold; font-size: 15px; margin-bottom: 10px;"><span aria-hidden="true">⚠️</span> Important Notice</div>
-  <p style="margin: 0 0 10px 0;">These study resources are provided free of charge for educational purposes only. They are intended as supplemental study aids and should not be used as a substitute for your course textbooks, lecture materials, or the guidance of your instructors.</p>
-  <p style="margin: 0 0 10px 0;">While every effort has been made to ensure accuracy, this content may contain errors, omissions, or information that is out of date. Science is constantly evolving, and material that was accurate at the time of writing may no longer reflect current understanding. Always verify important facts, formulas, and concepts against your official course materials.</p>
-  <p style="margin: 0 0 10px 0;">No guarantees are made regarding the completeness, accuracy, or reliability of any information presented on these sites. Use at your own discretion. If you spot an error, we appreciate you letting us know so it can be corrected.</p>
-  <p style="margin: 0 0 10px 0;">These materials are not affiliated with, endorsed by, or officially connected to any university, college, testing organization, or textbook publisher. All content represents the independent work and ideas of the author.</p>
-  <p style="margin: 0;">This resource is provided "as is" without warranty of any kind, express or implied. The author assumes no liability for any errors or for any actions taken based on the information provided here.</p>
+  <div class="disclaimer" role="note" aria-label="Important disclaimer">
+  <div class="disclaimer-title"><span aria-hidden="true">&#9888;</span> Important Notice</div>
+  <p>These study resources are provided free of charge for educational purposes only. They are intended as supplemental study aids and should not be used as a substitute for your course textbooks, lecture materials, or the guidance of your instructors.</p>
+  <p>While every effort has been made to ensure accuracy, this content may contain errors, omissions, or information that is out of date. Science is constantly evolving, and material that was accurate at the time of writing may no longer reflect current understanding. Always verify important facts, formulas, and concepts against your official course materials.</p>
+  <p>No guarantees are made regarding the completeness, accuracy, or reliability of any information presented on these sites. Use at your own discretion. If you spot an error, we appreciate you letting us know so it can be corrected.</p>
+  <p>These materials are not affiliated with, endorsed by, or officially connected to any university, college, testing organization, or textbook publisher. All content represents the independent work and ideas of the author.</p>
+  <p>This resource is provided "as is" without warranty of any kind, express or implied. The author assumes no liability for any errors or for any actions taken based on the information provided here.</p>
 </div>
 </body>
 </html>
